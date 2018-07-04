@@ -34,6 +34,8 @@
 
 - pom.xml에 tiles, lombok 설치
 
+- [+lombok 설치](https://projectlombok.org/all-versions)
+
   ~~~xml
   		<!-- lombok -->
   		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
@@ -168,7 +170,7 @@
   	</context-param>
   ~~~
 
-- src/main/wepapp/resources/database.properties 파일 생성
+- src/main/resources/database.properties 파일 생성
 
   ~~~xml
   database.driver=oracle.jdbc.driver.OracleDriver
@@ -177,9 +179,9 @@
   database.password=1234
   ~~~
 
-- src/main/wepapp/resources/config 폴더 생성
+- src/main/resources/config 폴더 생성
 
-- src/main/wepapp/resources/config/mybatis-config.xml 생성
+- src/main/resources/config/mybatis-config.xml 생성
 
   ~~~xml
   <?xml version="1.0" encoding="UTF-8"?>
@@ -200,7 +202,7 @@
   </configuration>
   ~~~
 
-- src/main/wepapp/resources/config/database-context.xml 생성
+- src/main/resources/config/database-context.xml 생성
 
   - beans, context, tx 체크
 
@@ -293,4 +295,203 @@
   GRANT CONNECT, RESOURCE TO BACHA_CANDY; --CONNECT와 RESOURCE 롤 부여
   ~~~
 
+
+- 테이블 
+
+  - members(id,pw,name,phone_number,address,email,grade,reg_date,update_date)
+
+  ~~~sql
+  create table members(
+    user_id VARCHAR2(20),
+    password VARCHAR2(20),
+    user_name VARCHAR2(20),
+    cell_phone VARCHAR2(20),
+    email VARCHAR2(50),
+    address VARCHAR2(200),
+    grade NUMBER,
+    reg_date DATE DEFAULT SYSDATE,
+    update_date DATE DEFAULT SYSDATE,
+    PRIMARY KEY(user_id)
+  );
+  ~~~
+
+
+
+- ecplipse oracle 연동 (Data Source Explorer)
+- sql 파일 `src/main/resources/` 경로에 넣기
+
+
+
+### mybatis
+
+- model class
+
+  ~~~java
+  package com.worldfriends.bacha.model;
   
+  import java.util.Date;
+  import lombok.Data;
+  
+  
+  @Data  //lombok getter,setter,생성자 자동으로 만드라줌
+  public class Member {
+  
+     private String user_id;
+     private String password;
+     private String user_name;
+     private String cell_phone;
+     private String email;
+     private String address;
+     private int grade;
+     private Date reg_date;
+     private Date update_date;
+  	
+  }
+  ~~~
+
+- mapper.xml
+
+  ~~~java
+  <?xml version="1.0" encoding="UTF-8" ?>
+  <!DOCTYPE mapper
+     PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.worldfriends.bacha.dao.MemberDao">
+  	<!-- SQL문과 태그를 매핑 -->
+  
+  
+      <!-- 멤버명수 -->
+  	<select id="getCount" resultType="int"><![CDATA[
+        select count(*) as total from members
+     ]]></select>
+  
+  	<!-- Member객체에 알아서 넣어주는데, CamelCase=true이므로 setcell_phone이 아니라 setCellPhone을 
+  		호출한다. -->
+  		
+  		
+  	<select id="selectList" resultType="Member"
+  		parameterType="Pagination"><![CDATA[
+        select user_id, user_name, password, cell_phone, email, address,
+         grade, reg_date, update_date from(
+         select row_number() over (order by reg_date desc) as seq, 
+         user_id, user_name, password, cell_phone, email, address, grade, reg_date, update_date
+         from members) where seq between #{start} and #{end}
+     ]]></select>
+  
+  	<select id="selectOne" resultType="Member"
+  		parameterType="String"><![CDATA[
+        select * from members
+        where user_id = #{userId}
+     ]]></select>
+  
+  	<!-- CamelCase=true이므로 getcell_phone이 아니라 getCellPhone을 호출한다. -->
+  	<insert id="insert" parameterType="Member"><![CDATA[
+        insert into members
+        (user_id, user_name, password, cell_phone, email, address, grade)
+        values(#{userId}, #{userName}, #{password}, #{cellPhone}, #{email},
+        #{address}, 1)
+     ]]></insert>
+  
+  	<update id="update" parameterType="Member"><![CDATA[
+        update members set
+        cell_phone=#{cellPhone},
+        email=#{email},
+        address=#{address},
+        update_date = sysdate
+        where user_id=#{userId} and password=#{password}
+     ]]></update>
+  
+  
+  	<delete id="delete" parameterType="String"><![CDATA[
+        delete from members
+        where user_id = #{userId}
+     ]]></delete>
+  
+  	<update id="updateByAdmin" parameterType="Member"><![CDATA[
+        update members set
+        cell_phone=#{cellPhone},
+        email=#{email},
+        address=#{address},
+        update_date = sysdate
+        where user_id=#{userId}
+     ]]></update>
+  
+  	<update id="changePassword" parameterType="Password"><![CDATA[
+        update members set
+        password=#{newPassword},
+        update_date = sysdate
+        where user_id=#{userId} and password=#{oldPassword}
+     ]]></update>
+  
+  	<update id="changePasswordByAdmin" parameterType="Password"><![CDATA[
+        update members set
+        password=#{newPassword},
+        update_date = sysdate
+        where user_id=#{userId}
+     ]]></update>
+  
+  
+  	<select id="selectListWithMessages" resultType="Member"
+  		parameterType="String"><![CDATA[
+        select *
+        from
+           members m,
+           ( SELECT with_talk, count(*) newMessages FROM talks
+           WHERE checked = 0 and user_Id = #{userId}
+           group by with_talk
+           ) t
+        where
+           m.user_id <> #{userId} and
+           m.user_id = t.with_talk(+)
+           order by newMessages ASC
+     ]]></select>
+     
+  </mapper>   
+  ~~~
+
+- BaseDao
+
+  ~~~java
+  package com.worldfriends.bacha.dao;
+  
+  import java.util.List;
+  import java.util.Map;
+  
+  public interface BaseDao<M, K> {
+      
+  	 int getCount() throws Exception;
+  	 List<M> selectList(Map map) throws Exception;
+  	 int insert(M m) throws Exception;
+  	 M selectOne(K k) throws Exception;
+  	 int update(M m) throws Exception;
+  	 int delete(K k) throws Exception;
+  	 
+  }
+  ~~~
+
+- MemberDao
+
+  ~~~java
+  package com.worldfriends.bacha.dao;
+  
+  import com.worldfriends.bacha.model.Member;
+  import com.worldfriends.bacha.model.Password;
+  
+  public interface MemberDao extends BaseDao<Member, String> {
+  
+     
+        
+  	   int updateByAdmin(Member member) throws Exception;
+  	   int changePassword(Password password) throws Exception;
+  	   int changePasswordByAdmin(Password password) throws Exception;
+  	                                                      
+  	
+  }
+  ~~~
+
+  
+
+### login
+
+- @Valid Annotation 

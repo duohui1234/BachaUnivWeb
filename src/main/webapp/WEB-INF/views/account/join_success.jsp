@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-  ${USER.userName} 
+  회원가입성공
+  ${member.userId }
 </body>
 </html>

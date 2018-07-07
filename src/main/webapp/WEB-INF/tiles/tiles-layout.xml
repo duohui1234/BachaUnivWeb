@@ -9,6 +9,8 @@
               template="/WEB-INF/views/layouts/default_template.jsp">
               <put-attribute name="menu"
                      value="/WEB-INF/views/layouts/default/menu.jsp" />
+              <put-attribute name="header"
+                     value="/WEB-INF/views/layouts/default/header.jsp" />
               <put-attribute name="body"
                      value="/WEB-INF/views/layouts/default/body.jsp" />
               <put-attribute name="footer"

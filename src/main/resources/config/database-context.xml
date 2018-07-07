@@ -34,7 +34,7 @@
    </bean>
 
    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-      <property name="basePackage" value="com.worldfrieds.bacha.dao" />
+      <property name="basePackage" value="com.worldfriends.bacha.dao" />
    </bean>
     
 

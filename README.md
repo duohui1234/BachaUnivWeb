@@ -25,10 +25,28 @@
 
 - web.xml에 문자 인코딩 필터 추가
 
+  ~~~java
+  <filter>
+      <filter-name>encodingFilter</filter-name>
+      <filter-class>
+                    org.springframework.web.filter.CharacterEncodingFilter
+      </filter-class>
+      <init-param>
+        <param-name>encoding</param-name>
+        <param-value>utf-8</param-value>
+      </init-param>
+   </filter>
+    
+    <filter-mapping>
+      <filter-name>encodingFilter</filter-name>
+      <url-pattern>/*</url-pattern>
+    </filter-mapping>
+  ~~~
+
 - server.xml 
 
   ~~~xml
-  <!--외부접속 허용 -->
+  <!--외부접속 허용 address="0.0.0.0" 추가-->
   <Connector connectionTimeout="20000" port="8000" protocol="HTTP/1.1" redirectPort="8443" address="0.0.0.0"/>  
   ~~~
 
@@ -60,7 +78,6 @@
 - servlet-context.xml
 
   ~~~xml
-  
   	<beans:bean id="tilesViewResolver"
   		class="org.springframework.web.servlet.view.UrlBasedViewResolver">
   		<beans:property name="viewClass"
@@ -80,8 +97,6 @@
 
 - src/main/webapp/WEB-INF/titles/tiles-layout.xml 파일 생성
 
-- src/main/webapp/WEB-INF/titles/tiles-layout.xml 
-
   ~~~xml
   <?xml version="1.0" encoding="UTF-8"?>
   <!DOCTYPE tiles-definitions PUBLIC
@@ -94,6 +109,8 @@
                 template="/WEB-INF/views/layouts/default_template.jsp">
                 <put-attribute name="menu"
                        value="/WEB-INF/views/layouts/default/menu.jsp" />
+                <put-attribute name="header"
+                       value="/WEB-INF/views/layouts/default/header.jsp" />
                 <put-attribute name="body"
                        value="/WEB-INF/views/layouts/default/body.jsp" />
                 <put-attribute name="footer"
@@ -119,7 +136,7 @@
   <!-- cache-period="0" => CSS 변경 사항을 바로 확인 할 수 있음 -->
   ~~~
 
-- my-batis
+- my-batist설정 - pom.xml에 추가
 
   ~~~xml
   <repositories>
@@ -248,30 +265,8 @@
       
   
   </beans>
-  ~~~
-
-- src/main/java/com.worldfriends.bacha.dao 패키지 생성
-
-- src/main/java/com.worldfriends.bacha.dao/BaseDao 인터페이스 생성
-
-  ~~~java
-  package com.worldfriends.bacha.dao;
   
-  import java.util.List;
-  import java.util.Map;
-  
-  public interface BaseDao<M, K> {
-      
-  	 int getCount() throws Exception;
-  	 List<M> selectList(Map map) throws Exception;
-  	 int insert(M m) throws Exception;
-  	 M selectOne(K k) throws Exception;
-  	 int update(M m) throws Exception;
-  	 int delete(K k) throws Exception;
-  	 
-  }
   ~~~
-
 
 
 
@@ -450,7 +445,7 @@
   </mapper>   
   ~~~
 
-- BaseDao
+- BaseDao (src/main/java/com.worldfriends.bacha.dao/BaseDao 인터페이스 생성)
 
   ~~~java
   package com.worldfriends.bacha.dao;
@@ -470,7 +465,7 @@
   }
   ~~~
 
-- MemberDao
+- MemberDao (src/main/java/com.worldfriends.bacha.dao/MemberDao 클래스 생성)
 
   ~~~java
   package com.worldfriends.bacha.dao;
@@ -492,6 +487,232 @@
 
   
 
-### login
+### login 기능
 
-- @Valid Annotation 
+- Login모델 클래스 생성 (with @valid 어노테이션)
+
+  - pom.xml에 depencency 추가
+
+  ~~~java
+  //pom.xml
+  
+  <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-validator -->
+  <dependency>
+  	<groupId>org.hibernate</groupId>
+  	<artifactId>hibernate-validator</artifactId>
+  	<version>6.0.10.Final</version>
+  </dependency>
+  ~~~
+
+  - login model 클래스 생성
+
+  ~~~java
+  package com.worldfriends.bacha.model;
+  
+  
+  import javax.validation.constraints.NotEmpty;
+  
+  import org.hibernate.validator.constraints.Length;
+  
+  import lombok.Data;
+  
+  @Data  //자동으로 생성자, getter, setter 생성
+  public class Login {
+  	
+     @NotEmpty(message="아이디를 입력하세요")  
+     private String userId;
+     
+     @NotEmpty(message= "비밀번호를 입력하세요")
+     //@Length(min=4, message="최소4자이상입력")
+     private String password;
+  }
+  ~~~
+
+  - service 인터페이스
+
+  ~~~java
+  package com.worldfriends.bacha.service;
+  
+  
+  public interface MemberService {
+  	
+     Member checkLogin(Login login) throws Exception;
+  	
+  }
+  ~~~
+
+  - service 클래스 작성
+
+  ~~~java
+  package com.worldfriends.bacha.service;
+  
+  import org.springframework.beans.factory.annotation.Autowired;
+  import org.springframework.stereotype.Service;
+  import org.springframework.transaction.annotation.Transactional;
+  import com.worldfriends.bacha.dao.MemberDao;
+  import com.worldfriends.bacha.exeption.LoginFailException;
+  import com.worldfriends.bacha.model.Login;
+  import com.worldfriends.bacha.model.Member;
+  
+  
+  @Service
+  public class MemberServiceImpl implements MemberService {
+  
+  	@Autowired
+  	MemberDao dao;
+  
+  	@Override
+  	public Member checkLogin(Login login) throws Exception {
+  		
+  		    Member member = dao.selectOne(login.getUserId());
+  	
+  			if(member!=null && member.getPassword().equals(login.getPassword()))
+  			    return member;	
+  
+  			
+              //로그인 실패 경우
+  			String msg = "";
+  			if(member==null) {
+  				msg = "존재하지 않는 ID입니다"; 
+  
+  			}else if(!member.getPassword().equals(login.getPassword())) {
+  				msg = "비밀번호가 틀립니다";
+  			}
+               
+  			throw new LoginFailException(msg);
+   
+  	}
+  	
+  }
+  
+  ~~~
+
+  - controller 메서드 작성
+
+  ~~~java
+  package com.worldfriends.bacha.controller;
+  
+  
+  @Controller
+  public class AccountController {
+  
+  	@Autowired
+  	MemberService service;
+  
+  	@ExceptionHandler(LoginFailException.class)
+  	public String handlerLoginError(HttpServletRequest request, Exception e) {
+  		request.setAttribute("login", new Login());
+  		request.setAttribute("error", e.getMessage());
+  		return "account/login";
+  	}
+  	
+  
+  	// 로그인 폼 페이지
+  	@RequestMapping(value = "/login", method = RequestMethod.GET)
+  	public String loginForm(Login login) {
+  		return "account/login";
+  	}
+  
+  	// 실제 로그인 기능
+  	@RequestMapping(value = "/login", method = RequestMethod.POST)
+  	public String loginSubmit(@Valid Login login, BindingResult result, HttpSession session) throws Exception {
+  
+  		if (result.hasErrors()) {
+  			return "account/login";
+  		}
+  
+  		Member member = service.checkLogin(login);
+  
+  		session.setAttribute("USER", member);
+  
+  		return "redirect:/login_success";	
+  		
+       }
+  	
+  	@RequestMapping(value = "/login_success", method = RequestMethod.GET)
+  	public String login_success() {
+  		
+  		return "account/login_success";
+  	}
+  		
+  
+  }
+  
+  ~~~
+
+  - jsp페이지 생성 (view)
+
+  ~~~java
+  //wevapp/WEB-INF/views/account/login.jsp
+  
+  <%@ page language="java" contentType="text/html; charset=UTF-8"   pageEncoding="UTF-8"%>
+  //폼 라이브러리 추가
+  <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+  <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+  <html>
+  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>로그인</title>
+  </head>
+  <body>
+   
+     
+     <!-- action 태그 생략시 현재 url로 전송, form:form에서 method 생략시 post 방식 -->
+     <form:form commandName="login"> 
+        <p>
+           id : 
+           <form:input path="userId"/>   <!-- name과 id가 userId로 정해짐 -->
+           <form:errors path="userId" element="div" cssClass="error"/> <!-- BindingResult 결과메시지 출력 -->
+        </p>
+        <p>
+           pw : 
+           <form:password path="password"/>
+           <form:errors path="password" element="div" cssClass="error"/>
+        </p>
+  
+        <button type="submit">
+           로그인
+        </button>
+     </form:form>
+     
+      <p>${error }</p>
+  
+     
+     
+  </body>
+  </html>
+  ~~~
+
+  ~~~java
+  //wevapp/WEB-INF/views/account/login_success.jsp
+  
+  <%@ page language="java" contentType="text/html; charset=UTF-8"
+      pageEncoding="UTF-8" %>
+  <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+  <html>
+  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Insert title here</title>
+  </head>
+  <body>
+    ${USER.userName} 
+  </body>
+  </html>
+  ~~~
+
+  - 예외 처리를 위한 LoginFailException클래스 생성
+
+  ~~~java
+  package com.worldfriends.bacha.exeption;
+  
+  public class LoginFailException extends Exception {
+  
+       public LoginFailException(String msg) {
+      	 super(msg);
+       }
+  	
+  }
+  ~~~
+
+  
+

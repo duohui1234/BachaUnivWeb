@@ -1,5 +1,7 @@
-@charset "UTF-8";
-
 .error{
-	color: red;
+	color:red;
+}
+.avatar-small{
+	width: 30px;
+	height: 30px;
 }

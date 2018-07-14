@@ -3,12 +3,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <div class="mt-4 mb-4">
-   <h2>데이터베이스 에러</h2>
-   <p class="error">데이터베이스 연산중 예외가 발생했습니다.</p>
+	<h2>데이터베이스 에러</h2>
+	<p class="error">데이터베이스 연산중 예외가 발생했습니다.</p>
 </div>
 <div class="md-form text-center">
-   <a href="javascript:history.back()" class="btn btn-primary btn-md">
-      <i class="fa fa-undo"></i>
-       돌아가기
-   </a>
+	<a href="javascript:history.back()" class="btn btn-primary btn-md">
+		<i class="fa fa-undo"></i>
+		 돌아가기
+	</a>
 </div>

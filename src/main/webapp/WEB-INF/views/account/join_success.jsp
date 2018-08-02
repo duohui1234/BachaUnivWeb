@@ -2,5 +2,5 @@
     pageEncoding="UTF-8"%>
 
 <body>
-	<p>${member.userName}님 안녕하세요.</p>
+	<p>${student.studentName}님 안녕하세요.</p>
 </body>

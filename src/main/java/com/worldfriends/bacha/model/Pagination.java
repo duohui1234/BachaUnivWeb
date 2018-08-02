@@ -9,8 +9,8 @@ public class Pagination {
 	
 	private int totalCount; 	//전체 데이터 건수(외부에서 전달될 값)
 	private int page; 			//현재 페이지(외부에서 전달될 값)
-	private int start; 			//현재 페이지 시작 번호
-	private int end; 			//현재 페이지 끝 번호
+	private int start; 			//현재 페이지 데이터 시작 번호
+	private int end; 			//현재 페이지 데이터 끝 번호
 	
 	private int totalPage; 		//전체 페이지 수
 	private int startPage; 		//현재 페이지 블럭에서 시작 페이지 번호

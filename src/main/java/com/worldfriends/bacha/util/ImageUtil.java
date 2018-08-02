@@ -9,7 +9,7 @@ import net.coobird.thumbnailator.geometry.Positions;
 //아바타 크기 조정용
 public class ImageUtil {
 	public static byte[] makeThumb(byte[] data) throws Exception {
-		return makeThumb(data, 100, 100); //사용자가 올린 이미지 크기를 강제로 줄인다.
+		return makeThumb(data, 150, 150); //사용자가 올린 이미지 크기를 강제로 줄인다.
 	}
 
 	public static byte[] makeThumb(byte[] data, int width, int height) throws Exception {

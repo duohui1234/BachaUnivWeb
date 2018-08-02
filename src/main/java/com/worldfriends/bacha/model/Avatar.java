@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Avatar {
-	private String userId;
+	private String studentNumber;
 	private byte[] image;
 }

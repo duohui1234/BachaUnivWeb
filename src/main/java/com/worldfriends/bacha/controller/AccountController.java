@@ -11,6 +11,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,9 +21,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.worldfriends.bacha.model.Avatar;
 import com.worldfriends.bacha.model.Login;
-import com.worldfriends.bacha.model.Member;
-import com.worldfriends.bacha.service.MemberService;
-
+import com.worldfriends.bacha.model.Student;
+import com.worldfriends.bacha.service.StudentService;
 import com.worldfriends.bacha.exception.LoginFailException;
 
 import com.worldfriends.bacha.controller.AccountController;
@@ -31,10 +31,11 @@ import com.worldfriends.bacha.controller.AccountController;
 public class AccountController {
 
 	@Autowired
-	MemberService service;
+	StudentService service;
 
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String loginForm(Login login) {
+	public String loginForm(Login login, @ModelAttribute("url") String url) {
+		login.setUrl(url);
 		return "account/login";
 	}
 
@@ -45,26 +46,25 @@ public class AccountController {
 			return "account/login";
 		}
 
-		Member member = service.checkLogin(login); //예외 발생시 
+		Student student = service.checkLogin(login); //예외 발생시 
 
 		// System.out.println(member);
-		session.setAttribute("USER", member); //여기서 예외 발생(로그인 실패)하면 handleLoginError()호출됨
+		session.setAttribute("USER", student); //여기서 예외 발생(로그인 실패)하면 handleLoginError()호출됨
 		
-		return "redirect:/login_success";
+		String url = login.getUrl();
+		if(url!=null && !url.isEmpty()) return "redirect:/"+url;
+		return "redirect:/";
 	}
 	
-	@RequestMapping(value="/login_success", method=RequestMethod.GET)
-	public String loginSuccess() {
-		return "account/login_success";
-	}
+
 
 	@RequestMapping(value = "/join", method = RequestMethod.GET)
-	public String joinForm(Member member) {
+	public String joinForm(Student student) {
 		return "account/join";
 	}
 	
 	@RequestMapping(value = "/join", method = RequestMethod.POST)
-	public String joinSubmit(@Valid Member member, 
+	public String joinSubmit(@Valid Student student, 
 							 BindingResult result,
 							 @RequestParam("avatar") MultipartFile mFile,
 							 RedirectAttributes ra) throws Exception {
@@ -75,14 +75,14 @@ public class AccountController {
 		
 		//아바타 저장
 		if(mFile != null && !mFile.isEmpty()) {
-			Avatar avatar = new Avatar(member.getUserId(), mFile.getBytes());
+			Avatar avatar = new Avatar(student.getStudentNumber(), mFile.getBytes());
 			service.insertAvatar(avatar);
 		}
 		
-		ra.addFlashAttribute("member", member); //redirect된 페이지에서 한 번 쓰이고 세션에서 제거
-		service.create(member); //여기서 예외 발생(회원가입 실패)하면 handleError() 호출됨
+		ra.addFlashAttribute("student", student); //redirect된 페이지에서 한 번 쓰이고 세션에서 제거
+		service.create(student); //여기서 예외 발생(회원가입 실패)하면 handleError() 호출됨
 		
-		System.out.println(member);
+		System.out.println(student);
 		
 		return "redirect:/login";
 	}
@@ -94,9 +94,9 @@ public class AccountController {
 	
 	@ResponseBody	//리턴값은 뷰가 아님. response 객체의 body로 전송
 	@RequestMapping(value="/idcheck", method=RequestMethod.GET)
-	public boolean checkId(@RequestParam("userId") String userId) {
+	public boolean checkId(@RequestParam("studentNumber") String studentNumber) {
 		try {
-			return service.checkId(userId); //id가 이미 존재하면 true 리턴
+			return service.checkId(studentNumber); //id가 이미 존재하면 true 리턴
 		}catch(Exception e) {
 			e.printStackTrace();
 			return true;
@@ -122,4 +122,6 @@ public class AccountController {
 	public String handleError() {
 		return "error/database_error"; //에러 화면 호출
 	}
+	
+	
 }

@@ -4,11 +4,12 @@
 
 <%-- <c:url value="/" var="root" />--%>
 	<!-- Brand -->
-	<a class="navbar-brand" href="${root}">Seojin :D</a>
+	<a class="navbar-brand" href="${root}">Bacha :D</a>
 
 	<!-- Toggler/collapsibe Button -->
 	<button class="navbar-toggler" type="button" data-toggle="collapse"
 		data-target="#collapsibleNavbar">
+		
 		<span class="navbar-toggler-icon"></span>
 	</button>
 
@@ -16,25 +17,21 @@
 	<div class="collapse navbar-collapse" id="collapsibleNavbar">
 		<ul class="navbar-nav">
 			<li class="nav-item"><a class="nav-link"
-				href="${root}gallery/lightbox">Gallery</a></li>
-			<li class="nav-item"><a class="nav-link"
-				href="${root}gallery/api_view">Gallery2</a></li>
-			<li class="nav-item"><a class="nav-link"
-				href="${root}gallery/flickr">Flickr</a></li>
-			<li class="nav-item"><a class="nav-link"
+				href="${root}alumni/list">Alumni</a></li>
+		   <li class="nav-item"><a class="nav-link"
 				href="${root}board/list">Board</a></li>
 		</ul>
 		<ul class="navbar-nav ml-auto">
 			<c:choose>
 				<c:when test="${not empty USER}">
-					<c:if test="${USER.userId=='admin'}">
+					<c:if test="${USER.studentNumber=='admin'}">
 						<li class="nav-item"><a class="nav-link"
-							href="${root}admin/member/list"> 회원관리</a></li>
+							href="${root}admin/student/list">회원관리</a></li>
 					</c:if>
 					<li class="nav-item">
-						<a class="nav-link" href="${root}member/profile">
-							<img src="${root}member/avatar?userId=${USER.userId}" class="rounded-circle avatar-small"/>
-							${USER.userId}
+						<a class="nav-link" href="${root}student/profile">
+							<img src="${root}student/avatar?studentNumber=${USER.studentNumber}" class="rounded-circle avatar-small"/>
+							${USER.studentNumber}
 						</a>
 					</li>
 					<li class="nav-item"><a class="nav-link" href="${root}logout"><i

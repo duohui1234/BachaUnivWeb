@@ -12,24 +12,24 @@
 
 	<select id="selectOne" resultType="Avatar" parameterType="String"><![CDATA[
 		select * from avatars
-		where user_id = #{userId}
+		where student_number = #{studentNumber}
 	]]></select>
 
 	<insert id="insert" parameterType="Avatar"><![CDATA[
 		insert into avatars
-		(user_id, image)
-		values(#{userId}, #{image})
+		(student_number, image)
+		values(#{studentNumber}, #{image})
 	]]></insert>
 
 	<update id="update" parameterType="Avatar"><![CDATA[
 		update avatars set
 		image = #{image}
-		where user_id=#{userId}
+		where student_number=#{studentNumber}
 	]]></update>
 
 	<delete id="delete" parameterType="String"><![CDATA[
 		delete from avatars
-		where user_id = #{userId}
+		where student_number = #{studentNumber}
 	]]></delete>
 
 </mapper>	

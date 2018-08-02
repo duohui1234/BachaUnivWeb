@@ -1,55 +1,60 @@
 package com.worldfriends.bacha.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.worldfriends.bacha.dao.AvatarDao;
-import com.worldfriends.bacha.dao.MemberDao;
+import com.worldfriends.bacha.dao.StudentDao;
 import com.worldfriends.bacha.exception.LoginFailException;
 import com.worldfriends.bacha.model.Avatar;
 import com.worldfriends.bacha.model.Login;
-import com.worldfriends.bacha.model.Member;
+import com.worldfriends.bacha.model.Student;
+import com.worldfriends.bacha.model.Pagination;
+import com.worldfriends.bacha.model.Password;
+import com.worldfriends.bacha.model.Student;
 import com.worldfriends.bacha.util.ImageUtil;
 
 
 @Service
-public class MemberServiceImpl implements MemberService {
+public class StudentServiceImpl implements StudentService {
 
 	@Autowired
-	MemberDao dao;
+	StudentDao dao;
 	
 	@Autowired
 	AvatarDao avatarDao;
 	
 	@Override
-	public Member checkLogin(Login login) throws Exception {
-		Member member = dao.selectOne(login.getUserId());
+	public Student checkLogin(Login login) throws Exception {
+		Student student = dao.selectOne(login.getStudentNumber());
 		
-		if(member == null)
-			throw new LoginFailException("존재하지 않는 아이디입니다.");
-		else if(!member.getPassword().equals(login.getPassword()))
+		if(student == null)
+			throw new LoginFailException("존재하지 않는 학번입니다.");
+		else if(!student.getPassword().equals(login.getPassword()))
 			throw new LoginFailException("비밀번호가 틀렸습니다.");
 
-		return member;
+		return student;
 	}
 
 	@Transactional //예외 없으면 commit, 예외 있으면 rollback
 	@Override
-	public boolean create(Member member) throws Exception {
-		int result = dao.insert(member);
+	public boolean create(Student student) throws Exception {
+		int result = dao.insert(student);
 		return result == 1;	//1을 반환하면 성공한 것
 	}
 	
 	@Override
-	public boolean checkId(String userId)throws Exception{
-		Member member = dao.selectOne(userId);
-		return member != null;
+	public boolean checkId(String studentNumber)throws Exception{
+		Student student = dao.selectOne(studentNumber);
+		return student != null;
 	}
 
 	@Override
-	public byte[] getAvatar(String userId) throws Exception {
-		Avatar avatar = avatarDao.selectOne(userId);
+	public byte[] getAvatar(String studentNumber) throws Exception {
+		Avatar avatar = avatarDao.selectOne(studentNumber);
 		if(avatar == null) { //아바타 이미지가 없는 경우
 			//익명 사용자를 미리 하나 등록해둠
 			avatar = avatarDao.selectOne("anonymous");
@@ -78,18 +83,37 @@ public class MemberServiceImpl implements MemberService {
 
 	@Transactional //예외 없으면 commit, 예외 있으면 rollback
 	@Override
-	public boolean deleteAvatar(String userId) throws Exception {
-		return avatarDao.delete(userId) == 1;
+	public boolean deleteAvatar(String studentNumber) throws Exception {
+		return avatarDao.delete(studentNumber) == 1;
 	}
 
 	@Override
-	public boolean update(Member member) throws Exception {
-		return dao.update(member) == 1;
+	public boolean update(Student Student) throws Exception {
+		return dao.update(Student) == 1;
 	}
 
 	@Override
-	public Member getMember(String userId) throws Exception {
-		return dao.selectOne(userId);
+	public Student getStudent(String studentNumber) throws Exception {
+		return dao.selectOne(studentNumber);
+	}
+
+	@Override
+	public boolean changePassword(Password password) throws Exception {
+		return dao.changePassword(password) == 1;
+	}
+
+	@Override
+	public Pagination getPagination(int page) throws Exception {
+		
+		return new Pagination(page,dao.getCount(),6,5);
+		
+	}
+
+	@Override
+	public List<Student> getList(Pagination pagination) throws Exception {
+		
+		return dao.selectList(pagination);
+		
 	}
 
 }

@@ -1,4 +1,4 @@
-package com.worldfriends.bacha.controller;
+package com.worldfriends.bacha;
 
 import java.text.DateFormat;
 import java.util.Date;

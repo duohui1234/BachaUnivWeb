@@ -25,7 +25,7 @@
 <div class="py-5">
 <form:form commandName="login"
 	class="text-center border border-light p-5 mx-auto col-lg-5 col-md-7 col-sm-8 rounded" 
-	style=" box-shadow: 5px 5px 6px -6px #777;">
+	style=" box-shadow: 1px 1px 5px -1px #777;">
 
 	<div class="login-form">
 		<c:if test="${not empty login.url }">

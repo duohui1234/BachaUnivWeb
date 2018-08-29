@@ -1,6 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
    pageEncoding="UTF-8"%>
 
+<script>
+
+
+
+</script>
+
 <!--Footer-->
 <footer
    class="page-footer text-center font-small unique-color-dark mt-4 pt-4 wow fadeIn">
@@ -12,8 +18,20 @@
       <div class="row">
 
          <!-- Grid column -->
-         <div class="col-md-4 mt-md-0 mt-3 mx-auto px-5">
+         <div class="col-md-3 mt-md-0 mt-3 mx-auto px-5">
+            <!-- Content -->
+            <h5 class="text-uppercase font-weight-bold">Location</h5>
+            <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto"
+               style="width: 60px;">
+            <iframe
+               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3723.652234127187!2d105.74391251493292!3d21.046596585988674!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x313454f1f75e2925%3A0xcb526a1e3c79848f!2za20gMTIgUUwzMiwgUGjDumMgRGnhu4VuLCBU4burIExpw6ptLCBIw6AgTuG7mWksIFZpZXRuYW0!5e0!3m2!1sfr!2s!4v1499121841790"
+               width="100%" height="200" style="border: none; overflow: hidden"
+               scrolling="no" frameborder="0" allowtransparency="true"></iframe>
+         </div>
+         <!-- Grid column -->
 
+         <!-- Grid column -->
+         <div class="col-md-3 mt-md-0 mt-3 mx-auto px-5">
             <!-- Content -->
             <h5 class="text-uppercase font-weight-bold">Bắc Hà</h5>
             <hr class="deep-purple accent-2 mb-4 mt-0 d-inline-block mx-auto"
@@ -22,16 +40,19 @@
                từ các em sinh viên và các bậc phụ huynh, những đóng góp sẽ giúp
                cho nhà trường hiểu và nâng cao nhất chất lượng đào tạo cho sinh
                viên.</p>
-            <p>Cở sở tại TP Bắc Ninh Địa chỉ: Số 15 đường Nguyễn Văn Cừ,
-               phường Ninh Xá, thành phố Bắc Ninh Văn phòng tại Hà Nội Địa chỉ:
-               Kho tổng hợp 101, Km11 - Quốc lộ 32 (đường Cầu Diễn) - Phú Diễn -
-               Từ Liêm - Hà Nội</p>
 
+             <form >
+                <div class="subscribe">
+                    <input type="email" class="footer-mail form-control" placeholder="mail@example.com" required>
+                    <input type="submit" class="footer-mail-btn btn btn-primary" value="Send" >
+                </div>
+             </form>
+             
          </div>
          <!-- Grid column -->
 
          <!-- Grid column -->
-         <div class="col-md-4 mb-md-0 mb-3 mx-auto px-5">
+         <div class="col-md-3 mb-md-0 mb-3 mx-auto px-5">
 
             <!-- Content -->
             <h5 class="text-uppercase font-weight-bold">FACEBOOK</h5>

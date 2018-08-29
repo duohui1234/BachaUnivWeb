@@ -20,9 +20,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.worldfriends.bacha.dao.BoardDao;
 import com.worldfriends.bacha.model.Attachment;
 import com.worldfriends.bacha.model.Board;
+import com.worldfriends.bacha.model.Options;
 import com.worldfriends.bacha.model.Pagination;
+import com.worldfriends.bacha.model.SortOption;
 import com.worldfriends.bacha.model.Student;
 import com.worldfriends.bacha.service.BoardService;
 
@@ -31,17 +34,29 @@ import com.worldfriends.bacha.service.BoardService;
 public class BoardController {
    @Autowired
    BoardService service;
+   @Autowired
+   BoardDao dao;
 
    @RequestMapping(value = "/list", method = RequestMethod.GET)
-   public void list(@RequestParam(value = "page", defaultValue = "1") int page, Model model) throws Exception {
+   public void list(@RequestParam(value = "page", defaultValue = "1") int page, 
+                @RequestParam(value = "option", defaultValue = "reg_date") String option, 
+                @RequestParam(value = "keyOption", defaultValue = "title") String keyOption,
+                @RequestParam(value = "keyword", defaultValue = "") String keyword,
+                Model model) throws Exception {
       // 공지사항 리스트 추출
       List<Board> listNotice = service.getListNotice();
 
       // 목록 및 페이지 정보 추출
-      Pagination pagination = service.getPagination(page, listNotice.size());
-      List<Board> list = service.getList(pagination);
+      Options options = new Options(keyOption, keyword);
+      int totalSize = dao.getCountByOption(options);
+      Pagination pagination = service.getPagination(page, listNotice.size(), totalSize);
+      SortOption sortOption = new SortOption(pagination, option, keyOption, keyword);
+      List<Board> list = service.getList(sortOption);
       
       // view에 넘길 정보 구성
+      model.addAttribute("option", option);
+      model.addAttribute("keyOption", keyOption);
+      model.addAttribute("keyword", keyword);
       model.addAttribute("pagination", pagination);
       model.addAttribute("list", list);
       model.addAttribute("listNotice", listNotice);

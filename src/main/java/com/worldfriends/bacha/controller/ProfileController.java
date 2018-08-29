@@ -109,7 +109,7 @@ public class ProfileController {
 		
 		
 		// 수정 실패시 정보 수정 페이지로 돌아감
-		if (!service.changePassword(password)) {
+		if (!service.changepassword(password)) {
 			result.reject("updateFail", "기존 비밀번호가 일치하지 않습니다.");
 			return "student/changepassword";
 		}

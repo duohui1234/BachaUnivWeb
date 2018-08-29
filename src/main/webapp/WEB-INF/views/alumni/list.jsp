@@ -2,75 +2,87 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
+<script>
+   $(document)
+         .ready(
+               function() {
+
+                  var id = document
+                        .getElementById("<c:out value="${option}"/>");
+                  id.classList.remove('before_selected');
+
+                  $('#search-btn')
+                        .click(
+                              function() {
+                                 var keyOption = $('.form-control')
+                                       .eq(0).val();
+                                 if (keyOption == 'ID')
+                                    keyOption = 'student_number';
+                                 else if (keyOption == 'Name')
+                                    keyOption = 'student_name';
+                                 else if (keyOption == 'Major')
+                                    keyOption = 'major';
+
+                                 var keyword = $('.form-control')
+                                       .eq(1).val();
+                                 window.location.href = "${root}alumni/list?keyOption="
+                                       + keyOption
+                                       + "&keyword="
+                                       + keyword;
+                              });
+               });
+</script>
+
 <div class="py-5">
-<!-- Section: Team v.3 -->
-<section class="container">
+   <!-- Section: Team v.3 -->
+   <section class="container">
+      <h4
+         style="margin-bottom: 50px !important; padding-bottom: 20px !important; border-bottom: 1px dotted #8c8b8b;">Our
+         Alumni</h4>
 
-	<h4 class="mb-4 text-center">Our alumni</h4>
+      <div class="border rounded col-10 mx-auto justify-content-center row">
+         <div class="text-center row justify-content-md-center col-12 mx-auto"
+            style="margin: 20px 0px !important" id="sort_option">
+            <a href="../alumni/list"
+               class="right col-lg-3 col-md-12 before_selected"
+               id="graduation_year"><i
+               class="fa fa-angle-right mr-2 align-baseline"></i>GRADUATION YEAR</a> <a
+               href="../alumni/list?option=student_number"
+               class="right col-lg-3 col-md-12 mb-10 before_selected"
+               id="student_number"><i
+               class="fa fa-angle-right mr-2 align-baseline"></i>STUDENT ID</a> <a
+               href="../alumni/list?option=student_name"
+               class="col-lg-3 col-md-12 before_selected" id="student_name"><i
+               class="fa fa-angle-right mr-2 align-baseline"></i>NAME</a> <a
+               href="../alumni/list?option=major"
+               class="right col-lg-3 col-md-12 before_selected" id="major"><i
+               class="fa fa-angle-right mr-2 align-baseline"></i>MAJOR</a>
+         </div>
+      </div>
 
-	<!-- Section heading -->
+      <div class="col-10 mx-auto border-bottom my-4"></div>
 
-	<!-- Grid row-->
-	<div class="row text-center text-md-left mx-auto">
-		<c:forEach var="alumnus" items="${list}">
-			<!-- Grid column -->
-			<div
-				class="col-lg-5 col-md-12 mb-5 d-md-flex border border-light mx-auto "
-				style="padding: 20px !important">
-				<div class="col-6 mb-md-0 mb-4 mx-auto">
-					<img
-						src="${root}student/avatar?studentNumber=${alumnus.studentNumber}"
-						class="rounded z-depth-1 avatar-midium">
-				</div>
-				
-				<div class="col-6 mx-auto">
+      <jsp:include page="list_content.jsp"></jsp:include>
 
-					<h4 class="font-weight-bold mb-3">
-						 ${alumnus.studentName}
-					</h4>
-					<h6 class="font-weight-bold grey-text mb-3">${alumnus.major}/
-						${alumnus.studentNumber}</h6>
+   </section>
+   <!-- Section: Team v.3 -->
 
-					<p>${alumnus.introduction}</p>
-
-					<div class="contact_icon">
-
-						<!--email -->
-						<a class="p-2 fa-sm"
-							href="contact_form?email=${alumnus.email}"> 
-                        <i class="fa fa-envelope"></i>
-						</a>
-
-						<!-- Facebook-->
-						<a class="p-2 fa-lg" >
-						 <i class="fa fa-facebook "> </i>
-						</a>
-						<!-- Twitter -->
-						<a class="p-2 fa-lg" > 
-						 <i class="fa fa-twitter">
-						</i>
-						</a>
-						<!--instagram -->
-						<a class="p-2 fa-lg">
-						 <i class="fa fa-instagram"></i>
-						</a>
-
-					</div>
-
-
-
-				</div>
-			</div>
-			<!-- Grid column -->
-		</c:forEach>
-	</div>
-
-</section>
-<!-- Section: Team v.3 -->
-
-<!-- page block -->
-<%@ taglib tagdir="/WEB-INF/tags/util" prefix="iot"%>
-<iot:pagination pagination="${pagination}" link="list"></iot:pagination>
+   <!-- page block -->
+   <%@ taglib tagdir="/WEB-INF/tags/util" prefix="iot"%>
+   <iot:pagination pagination="${pagination}" link="list"></iot:pagination>
+   <!-- search -->
+   <div id="search" class="row justify-content-center mr-0 mt-3">
+      <select id="search-tag" class="form-control">
+         <option>ID</option>
+         <option>Name</option>
+         <option>Major</option>
+      </select>
+      <div id="search-content" class="active-cyan-4 ml-1">
+         <input class="form-control radius-style" type="text"
+            placeholder="Search" aria-label="Search">
+      </div>
+      <button id="search-btn" type="button" class="btn btn-primary">
+         <i class="fa fa-search"></i>
+      </button>
+   </div>
 </div>
-
-

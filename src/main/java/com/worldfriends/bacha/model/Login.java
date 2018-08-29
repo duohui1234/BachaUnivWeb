@@ -8,11 +8,11 @@ import lombok.Data;
 
 @Data
 public class Login {
-	@NotEmpty(message = "Fill your Student Number in here")
+	@NotEmpty(message = "Student Number cannot be blank")
 	private String studentNumber;
 	
-	@NotEmpty(message = "Fill your Password in here")
-	@Length(min=4, message = "minimum is 4 characters")
+	@NotEmpty(message = "Password cannot be blank")
+	//@Length(min=4, message = "minimum is 4 characters")
 	private String password;
 	
 	private String url;

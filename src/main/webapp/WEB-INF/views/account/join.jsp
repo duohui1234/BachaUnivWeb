@@ -6,7 +6,32 @@
 
 
 <script>
+
+function showname () {
+    var name = document.getElementById('ex_file');
+    var list = [name.files.item(0).name];
+    return list;
+  };
+
 	$(function() { //페이지가 로드되면 실행
+		
+		  $('#ex_file').change(function () {
+			    var list = showname();
+			   $('#fileList').html("<span>"+list[0]+"</span><br/>");
+			
+			    	    
+			  });
+			  
+			     $('.filebox label[for="ex_file"]').mouseover(function(){
+			    	 $('.filebox label[for="ex_file"]').removeClass('font-color');
+			    	 $('.filebox label[for="ex_file"]').addClass('upload');
+			     });
+			         
+			     $('.filebox label[for="ex_file"]').mouseout(function(){
+			    	 $('.filebox label[for="ex_file"]').addClass('font-color');
+			    	 $('.filebox label[for="ex_file"]').removeClass('upload');
+			     });
+		
 		var check_id = false; //id 중복확인
 		var check_pw = false; //비밀번호 일치여부 확인
 
@@ -100,8 +125,20 @@
 		$('#address').keyup(function(e) {
 			$('.address').html('');
 		});
+
+		$('#introduction').keyup(function(e) {
+			$('.introduction').html('');
+		});
 		
 		
+		$('#introduction').keyup(function(e) {
+			var length = $('#introduction').val().length;
+			if(length>70){
+			   $('#check-introduction-length').addClass('error').html('maximum is 70 characters');
+			}else{
+				$('#check-introduction-length').removeClass('error').html('');
+			}
+		});
 
 	});
 </script>
@@ -109,7 +146,7 @@
 <div class="py-5">
 <form:form commandName="student" id="join-form"
 		enctype="multipart/form-data" class="text-center border border-light p-5 mx-auto col-lg-5 col-md-8 col-sm-9 rounded " 
-		style=" box-shadow: 5px 5px 6px -6px #777;">
+		style="  box-shadow: 1px 1px 5px -1px #777;">
 
     <p class="h4 mb-4">Sign up</p>
 
@@ -185,13 +222,21 @@
     </div>
 
     <!-- Introduction -->
-	<form:input path="introduction" class="form-control mb-4" placeholder="Introduction"/>
+    <div class="mb-4">
+	<form:input path="introduction" class="form-control" placeholder="Introduction"/>
+	<form:errors path="introduction" element="div" cssClass="error introduction" />
+	<span id="check-introduction-length"></span>
+	</div>
 
 
-    <!-- profile -->
-    <div>		
-      <input type="file" name="avatar" accept="image/*" id="defaultRegisterPhonePassword" class="form-control mb-4" placeholder="Profile Image" aria-describedby="defaultRegisterFormPhoneHelpBlock"/>
-    </div>
+
+
+     <div class="filebox text-left">	
+		<label for="ex_file" class="font-color">IMAGE UPLOAD</label> 
+        <input type="file" id="ex_file" name="avatar" accept="image/*" id="defaultRegisterPhonePassword" class="form-control mb-4" placeholder="Profile Image" aria-describedby="defaultRegisterFormPhoneHelpBlock"/>
+	    <span id="fileList" style="padding-left:10px"></span>
+	</div> 
+
 
     <!-- Sign up button -->
     <button class="btn my-4 btn-block" type="submit" style="background-color: #ee3733;">Sign in</button>

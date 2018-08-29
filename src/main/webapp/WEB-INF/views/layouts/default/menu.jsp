@@ -26,7 +26,7 @@
          <!-- Left -->
          <ul class="navbar-nav ml-auto">
             <li class="nav-item"><a class="nav-link" 
-               href="${root}">Home</a></li>
+               href="${root}">HOME</a></li>
             <li class="nav-item"><a class="nav-link"
                href="${root}alumni/list">ALUMNI</a></li>
             <li class="nav-item"><a class="nav-link"

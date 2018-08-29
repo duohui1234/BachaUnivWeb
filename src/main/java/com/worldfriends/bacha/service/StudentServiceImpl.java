@@ -14,6 +14,7 @@ import com.worldfriends.bacha.model.Login;
 import com.worldfriends.bacha.model.Student;
 import com.worldfriends.bacha.model.Pagination;
 import com.worldfriends.bacha.model.Password;
+import com.worldfriends.bacha.model.SortOption;
 import com.worldfriends.bacha.util.ImageUtil;
 
 @Service
@@ -98,7 +99,7 @@ public class StudentServiceImpl implements StudentService {
 
    @Transactional
    @Override
-   public boolean changePassword(Password password) throws Exception {
+   public boolean changepassword(Password password) throws Exception {
       return dao.changePassword(password) == 1;
    }
 
@@ -106,10 +107,27 @@ public class StudentServiceImpl implements StudentService {
    public Pagination getPagination(int page) throws Exception {
       return new Pagination(page, dao.getCount(), 6, 5, 0);
    }
+   @Override
+   public Pagination getPagination(int page, int totalSize) throws Exception {
+      return new Pagination(page, totalSize, 6, 5, 0);
+   }
 
    @Override
-   public List<Student> getList(Pagination pagination) throws Exception {
-      return dao.selectList(pagination);
+   public Pagination getPaginationHome(int page, int totalSize) throws Exception {
+   	// TODO Auto-generated method stub
+	  return new Pagination(page, totalSize, 3, 5, 0);
    }
+   
+   @Override
+   public List<Student> getListByNumSort(SortOption sortOption) throws Exception {
+       return dao.selectListByNumSort(sortOption);
+   }
+
+   @Override
+   public List<Student> getListByAlphabetSort(SortOption sortOption) throws Exception {
+      return dao.selectListByAlphabetSort(sortOption);
+   }
+
+
 
 }

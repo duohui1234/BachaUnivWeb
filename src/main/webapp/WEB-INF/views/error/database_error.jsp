@@ -2,13 +2,16 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
-<div class="mt-4 mb-4">
-	<h2>데이터베이스 에러</h2>
-	<p class="error">데이터베이스 연산중 예외가 발생했습니다.</p>
-</div>
-<div class="md-form text-center">
-	<a href="javascript:history.back()" class="btn btn-primary btn-md">
-		<i class="fa fa-undo"></i>
-		 돌아가기
-	</a>
+
+<div class="py-4">
+   <!-- Section: Team v.3 -->
+   <section class="container p-5">
+      <h2>Database Error</h2>
+      <p class="error">An exception occurred during database operation</p>
+ 
+      <div class="md-form text-center mt-5">
+	     <a href="javascript:history.back()" class="btn red-button btn-md">
+		 <i class="fa fa-undo mr-2"></i>BACK</a>
+      </div>
+  </section>
 </div>

@@ -64,13 +64,11 @@
 
 
 <div class="py-5">
-<div id="edit-form" class="edit-form container mx-auto col-lg-6 col-md-8 col-sm-10 border border-light rounded" 
-style="padding:40px!important;  box-shadow: 5px 5px 6px -6px #777;">
-	<p class="h4 mb-4 text-center"> Change Password</p>
-	<form:form commandName="password" id="change-form">
-		
+<div id="edit-form" class="edit-form container mx-auto col-lg-6 col-md-8 col-sm-10" >
+    <h4  style="margin-bottom:50px!important; padding-bottom:20px!important; border-bottom: 1px dotted #8c8b8b;" >Change Password</h4>
 
-		
+	<form:form commandName="password" id="change-form">
+
 		<input type="hidden" name= "studentNumber" value = "${USER.studentNumber}" />
 		
 		
@@ -100,6 +98,9 @@ style="padding:40px!important;  box-shadow: 5px 5px 6px -6px #777;">
 			<button type="submit" class="btn"  style="background-color: #ee3733;">
 				<i class="fa fa-check"></i> Submit
 			</button>
+		   
+		   <a href="../student/profile" class="btn red-button">
+		   <i class="fa fa-undo"></i> CANCEL </a>
 		</div>
 		
 	</form:form>

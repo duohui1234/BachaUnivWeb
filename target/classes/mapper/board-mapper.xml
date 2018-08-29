@@ -9,20 +9,30 @@
    <select id="getCount" resultType="int"><![CDATA[
       select count(*) as total from boards
    ]]></select>
+   <select id="getCountByOption" resultType="int" parameterType="Options"><![CDATA[
+      select count(*) as total from boards where ${keyOption} LIKE '%${keyword}%'
+   ]]></select>
 
    <!-- Student객체에 알아서 넣어주는데, CamelCase=true이므로 setcell_phone이 아니라 setCellPhone을 호출한다. -->
    <select id="selectList" resultType="Board" parameterType="Pagination"><![CDATA[
-      select board_id, title, writer, read_cnt, reg_date from(
+      select board_id, title, writer, writer_name, read_cnt, reg_date, seq from(
        select row_number() over (order by reg_date desc) as seq, 
-       board_id, title, writer, read_cnt, reg_date
+       board_id, title, writer, writer_name, read_cnt, reg_date
        from boards) where seq between #{start} and #{end}
    ]]></select>
    
+   <select id="selectListByOption" resultType="Board" parameterType="SortOption"><![CDATA[
+      select board_id, title, writer, writer_name, read_cnt, reg_date, seq from(
+       select row_number() over (order by ${option} desc) as seq, 
+       board_id, title, writer, writer_name, read_cnt, reg_date 
+      from boards where ${keyOption} LIKE '%${keyword}%') where seq between #{start} and #{end} 
+    ]]></select>
+   
    <select id="selectListUser" resultType="Board" parameterType="String"><![CDATA[
-      select board_id, title, writer, read_cnt, reg_date from(
-       select row_number() over (order by reg_date desc) as seq, 
-       board_id, title, writer, read_cnt, reg_date
-       from boards) where writer = #{admin}
+      select board_id, title, writer, writer_name, read_cnt, reg_date 
+      from boards 
+      where writer = #{admin} 
+      order by reg_date desc 
    ]]></select>
 
    <select id="selectOne" resultType="Board" parameterType="int"><![CDATA[
@@ -35,8 +45,8 @@
    <insert id="insert" parameterType="Board"
       useGeneratedKeys="true" keyColumn="board_id" keyProperty="boardId"><![CDATA[
       insert into boards
-      (board_id, title, writer, read_cnt, content, reg_date, update_date)
-      values(boards_seq.nextval, #{title}, #{writer}, 0, #{content}, sysdate, sysdate)
+      (board_id, title, writer, writer_name, read_cnt, content, reg_date, update_date)
+      values(boards_seq.nextval, #{title}, #{writer}, #{writerName}, 0, #{content}, sysdate, sysdate)
    ]]></insert>
 
    <update id="update" parameterType="Board"><![CDATA[

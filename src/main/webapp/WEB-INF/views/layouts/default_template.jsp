@@ -28,6 +28,7 @@
 <script src="<c:url value="/resources/js/common.js"/>"></script>
 <link rel="stylesheet" href="${root}/resources/css/main.css" />
 
+
 <script>
    var offset = 200;
    var duration = 500;

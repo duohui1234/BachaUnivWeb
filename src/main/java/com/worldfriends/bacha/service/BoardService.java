@@ -7,14 +7,16 @@ import org.springframework.web.multipart.MultipartFile;
 import com.worldfriends.bacha.model.Attachment;
 import com.worldfriends.bacha.model.Board;
 import com.worldfriends.bacha.model.Pagination;
+import com.worldfriends.bacha.model.SortOption;
 
 public interface BoardService {
    boolean create(Board board, List<MultipartFile> fileList) throws Exception;
    boolean update(Board board, List<MultipartFile> fileList) throws Exception;
    boolean delete(int boardId) throws Exception;
    Board getBoard(int boardId) throws Exception;
-   List<Board> getList(Pagination pagination) throws Exception;
-   Pagination getPagination(int page, int noticeNum) throws Exception;
+   List<Board> getList(SortOption sortOption) throws Exception;
+   Pagination getPagination(int page, int noticeNum, int totalSize) throws Exception;
+   Pagination getPaginationHome(int page, int noticeNum, int totalSize) throws Exception;
    boolean increaseReadCnt(int boardId) throws Exception;
    
    //첨부파일

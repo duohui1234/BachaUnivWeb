@@ -6,10 +6,11 @@
 
 <div class="py-5">
 
-<div class="container col-lg-7 col-md-8 col-sm-10 border border-light rounded" style=" box-shadow: 5px 5px 6px -6px #777;">
+<div class="container col-lg-7 col-md-8 col-sm-10 border border-light rounded" style=" box-shadow: 1px 1px 5px -1px #777;">
   <br/>
   <p class="h4 mb-4 text-center">CONTACT</p>
-  <p class="text-center"><i class="fa fa-envelope"></i>&nbsp;&nbsp;To. ${email}</p>
+  <p class="text-center">${email}</p>
+
   
   <div class="row col-12 mt-30">
     <form class="col-sm-10 mx-auto" action="mailto:${email}" method="post" enctype="text/plain">

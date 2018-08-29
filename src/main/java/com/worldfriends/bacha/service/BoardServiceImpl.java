@@ -15,6 +15,7 @@ import com.worldfriends.bacha.dao.StudentDao;
 import com.worldfriends.bacha.model.Attachment;
 import com.worldfriends.bacha.model.Board;
 import com.worldfriends.bacha.model.Pagination;
+import com.worldfriends.bacha.model.SortOption;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -78,16 +79,17 @@ public class BoardServiceImpl implements BoardService {
       Board board = dao.selectOne(boardId);
       List<Attachment> attachments = attachmentDao.selectList(boardId);
       board.setAttachments(attachments);
+      board.setReplyNum(replyDao.getCount(board.getBoardId()));
       return board;
    }
 
    @Override
-   public List<Board> getList(Pagination pagination) throws Exception {
-      List<Board> list = dao.selectList(pagination);
+   public List<Board> getList(SortOption sortOption) throws Exception {
+      List<Board> list = dao.selectListByOption(sortOption);
       for(Board board:list) {
          board.setReplyNum(replyDao.getCount(board.getBoardId()));
          board.setHasAttachment(attachmentDao.getCount(board.getBoardId())>0?true:false);
-         board.setWriterName(studentDao.selectOne(board.getWriter()).getStudentName());
+         board.setSeq(dao.getCount()-board.getSeq()+1); //역순으로 수정
       }
       return list;
    } 
@@ -98,14 +100,17 @@ public class BoardServiceImpl implements BoardService {
       for(Board board:list) {
          board.setReplyNum(replyDao.getCount(board.getBoardId()));
          board.setHasAttachment(attachmentDao.getCount(board.getBoardId())>0?true:false);
-         board.setWriterName(studentDao.selectOne(board.getWriter()).getStudentName());
       }
       return list;
    } 
 
    @Override
-   public Pagination getPagination(int page, int noticeNum) throws Exception {
-      return new Pagination(page, dao.getCount(), 15, 10, noticeNum);
+   public Pagination getPagination(int page, int noticeNum, int totalSize) throws Exception {
+      return new Pagination(page, totalSize, 15, 10, noticeNum);
+   }
+   @Override
+   public Pagination getPaginationHome(int page, int noticeNum, int totalSize) throws Exception {
+      return new Pagination(page, totalSize, 10, 10, noticeNum);
    }
 
    @Transactional

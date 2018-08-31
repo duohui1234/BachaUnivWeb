@@ -32,120 +32,120 @@ import com.worldfriends.bacha.service.BoardService;
 @Controller
 @RequestMapping("/board")
 public class BoardController {
-   @Autowired
-   BoardService service;
-   @Autowired
-   BoardDao dao;
+	@Autowired
+	BoardService service;
+	@Autowired
+	BoardDao dao;
 
-   @RequestMapping(value = "/list", method = RequestMethod.GET)
-   public void list(@RequestParam(value = "page", defaultValue = "1") int page, 
-                @RequestParam(value = "option", defaultValue = "reg_date") String option, 
-                @RequestParam(value = "keyOption", defaultValue = "title") String keyOption,
-                @RequestParam(value = "keyword", defaultValue = "") String keyword,
-                Model model) throws Exception {
-      // 공지사항 리스트 추출
-      List<Board> listNotice = service.getListNotice();
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
+	public void list(@RequestParam(value = "page", defaultValue = "1") int page, 
+					 @RequestParam(value = "option", defaultValue = "reg_date") String option, 
+					 @RequestParam(value = "keyOption", defaultValue = "title") String keyOption,
+					 @RequestParam(value = "keyword", defaultValue = "") String keyword,
+					 Model model) throws Exception {
+		// 공지사항 리스트 추출
+		List<Board> listNotice = service.getListNotice();
 
-      // 목록 및 페이지 정보 추출
-      Options options = new Options(keyOption, keyword);
-      int totalSize = dao.getCountByOption(options);
-      Pagination pagination = service.getPagination(page, listNotice.size(), totalSize);
-      SortOption sortOption = new SortOption(pagination, option, keyOption, keyword);
-      List<Board> list = service.getList(sortOption);
-      
-      // view에 넘길 정보 구성
-      model.addAttribute("option", option);
-      model.addAttribute("keyOption", keyOption);
-      model.addAttribute("keyword", keyword);
-      model.addAttribute("pagination", pagination);
-      model.addAttribute("list", list);
-      model.addAttribute("listNotice", listNotice);
-      // board/list 뷰로 이동
-   }
+		// 목록 및 페이지 정보 추출
+		Options options = new Options(keyOption, keyword);
+		int totalSize = dao.getCountByOption(options);
+		Pagination pagination = service.getPagination(page, listNotice.size(), totalSize);
+		SortOption sortOption = new SortOption(pagination, option, keyOption, keyword);
+		List<Board> list = service.getList(sortOption);
+		
+		// view에 넘길 정보 구성
+		model.addAttribute("option", option);
+		model.addAttribute("keyOption", keyOption);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("pagination", pagination);
+		model.addAttribute("list", list);
+		model.addAttribute("listNotice", listNotice);
+		// board/list 뷰로 이동
+	}
 
-   @RequestMapping(value = "/create", method = RequestMethod.GET)
-   public void createForm(Board board) {
+	@RequestMapping(value = "/create", method = RequestMethod.GET)
+	public void createForm(Board board) {
 
-   }
+	}
 
-   @RequestMapping(value = "/create", method = RequestMethod.POST)
-   public String createSubmit(@Valid Board board,
-                        BindingResult result,
-                        MultipartHttpServletRequest request) throws Exception {
-      // 유효성 검사 결과 실패
-      if (result.hasErrors())
-         return "board/create";
-      
-      List<MultipartFile> attachments = request.getFiles("files");
-      
-      if(!service.create(board, attachments)) return "board/create";
-      return "redirect:list";
-   }
-   
-   @RequestMapping(value = "/view/{boardId}", method = RequestMethod.GET)
-   public String view(@PathVariable int boardId, Model model) throws Exception {
-      service.increaseReadCnt(boardId); //조회수 증가
-      Board board = service.getBoard(boardId);
-      model.addAttribute(board);
-      return "board/view";
-   }
-   
-   @RequestMapping(value="/download/{attachmentId}", method=RequestMethod.GET)
-   public String download(@PathVariable int attachmentId, Model model) throws Exception{
-      Attachment file = service.getAttachment(attachmentId);
-      
-      String path = "c:/temp/upload"+"/"+file.getLocation();
-      model.addAttribute("type", "application/octet-stream");
-      model.addAttribute("path", path);
-      model.addAttribute("fileName", file.getFileName());
-      
-      //file.readyDownload("c:/temp/upload/", model);
-      
-      return "download";    //사용자 정의 뷰 이름. beanNameResolver로 호출됨
-   }
+	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	public String createSubmit(@Valid Board board,
+							   BindingResult result,
+							   MultipartHttpServletRequest request) throws Exception {
+		// 유효성 검사 결과 실패
+		if (result.hasErrors())
+			return "board/create";
+		
+		List<MultipartFile> attachments = request.getFiles("files");
+		
+		if(!service.create(board, attachments)) return "board/create";
+		return "redirect:list";
+	}
+	
+	@RequestMapping(value = "/view/{boardId}", method = RequestMethod.GET)
+	public String view(@PathVariable int boardId, Model model) throws Exception {
+		service.increaseReadCnt(boardId); //조회수 증가
+		Board board = service.getBoard(boardId);
+		model.addAttribute(board);
+		return "board/view";
+	}
+	
+	@RequestMapping(value="/download/{attachmentId}", method=RequestMethod.GET)
+	public String download(@PathVariable int attachmentId, Model model) throws Exception{
+		Attachment file = service.getAttachment(attachmentId);
+		
+		String path = "c:/temp/upload"+"/"+file.getLocation();
+		model.addAttribute("type", "application/octet-stream");
+		model.addAttribute("path", path);
+		model.addAttribute("fileName", file.getFileName());
+		
+		//file.readyDownload("c:/temp/upload/", model);
+		
+		return "download"; 	//사용자 정의 뷰 이름. beanNameResolver로 호출됨
+	}
 
-   @RequestMapping(value = "/edit/{boardId}", method = RequestMethod.GET)
-   public String edit(@PathVariable int boardId, Model model) throws Exception {
-      Board board = service.getBoard(boardId);
-      model.addAttribute(board);
-      return "board/edit";
-   }
-   
-   @RequestMapping(value = "/edit/{boardId}", method = RequestMethod.POST)
-   public String editSubmit(@PathVariable int boardId,
-                      @Valid Board board, 
-                      BindingResult result,
-                      MultipartHttpServletRequest request) throws Exception {
+	@RequestMapping(value = "/edit/{boardId}", method = RequestMethod.GET)
+	public String edit(@PathVariable int boardId, Model model) throws Exception {
+		Board board = service.getBoard(boardId);
+		model.addAttribute(board);
+		return "board/edit";
+	}
+	
+	@RequestMapping(value = "/edit/{boardId}", method = RequestMethod.POST)
+	public String editSubmit(@PathVariable int boardId,
+							 @Valid Board board, 
+							 BindingResult result,
+							 MultipartHttpServletRequest request) throws Exception {
 
-      // 유효성 검사 결과 실패
-      if (result.hasErrors())
-         return "board/edit";
-      
-      List<MultipartFile> attachments = request.getFiles("files");
-      
-      if(!service.update(board, attachments)) return "board/edit";
-      return "redirect:/board/view/"+boardId;
-   }
-   
-   @RequestMapping(value="/delete/{boardId}", method=RequestMethod.GET)
-   public String editForm(@PathVariable int boardId, HttpSession session) throws Exception{
-      Student user = (Student) session.getAttribute("USER");
-      Board board = service.getBoard(boardId);
-      if(user==null || !board.getWriter().equals(user.getStudentNumber())) //비정상적인 접근
-         return "redirect:/board/list";
-      if(!service.delete(boardId)) return "board/view/"+boardId;
-      return "redirect:/board/list";
-   }
-   
-   @ResponseBody   //view를 찾지않고 브라우저에게 처리 결과를 직접 응답(리턴)
-   @RequestMapping(value="/delete_attachment/{attachmentId}", method=RequestMethod.DELETE)
-   public boolean delete(@PathVariable int attachmentId) throws Exception{
-      return service.deleteAttachment(attachmentId); //첨부파일 삭제
-   }
+		// 유효성 검사 결과 실패
+		if (result.hasErrors())
+			return "board/edit";
+		
+		List<MultipartFile> attachments = request.getFiles("files");
+		
+		if(!service.update(board, attachments)) return "board/edit";
+		return "redirect:/board/view/"+boardId;
+	}
+	
+	@RequestMapping(value="/delete/{boardId}", method=RequestMethod.GET)
+	public String editForm(@PathVariable int boardId, HttpSession session) throws Exception{
+		Student user = (Student) session.getAttribute("USER");
+		Board board = service.getBoard(boardId);
+		if(user==null || !board.getWriter().equals(user.getStudentNumber())) //비정상적인 접근
+			return "redirect:/board/list";
+		if(!service.delete(boardId)) return "board/view/"+boardId;
+		return "redirect:/board/list";
+	}
+	
+	@ResponseBody	//view를 찾지않고 브라우저에게 처리 결과를 직접 응답(리턴)
+	@RequestMapping(value="/delete_attachment/{attachmentId}", method=RequestMethod.DELETE)
+	public boolean delete(@PathVariable int attachmentId) throws Exception{
+		return service.deleteAttachment(attachmentId); //첨부파일 삭제
+	}
 
-   // 데이터베이스 예외 발생시 호출됨
-   @ExceptionHandler({ SQLException.class, DataAccessException.class })
-   public String handleError() {
-      return "error/database_error"; // 에러 화면 호출
-   }
+	// 데이터베이스 예외 발생시 호출됨
+	@ExceptionHandler({ SQLException.class, DataAccessException.class })
+	public String handleError() {
+		return "error/database_error"; // 에러 화면 호출
+	}
 }

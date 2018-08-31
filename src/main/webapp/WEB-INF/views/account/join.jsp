@@ -6,32 +6,30 @@
 
 
 <script>
-
-function showname () {
-    var name = document.getElementById('ex_file');
-    var list = [name.files.item(0).name];
-    return list;
-  };
+	function showname() {
+		var name = document.getElementById('ex_file');
+		var list = [ name.files.item(0).name ];
+		return list;
+	};
 
 	$(function() { //페이지가 로드되면 실행
-		
-		  $('#ex_file').change(function () {
-			    var list = showname();
-			   $('#fileList').html("<span>"+list[0]+"</span><br/>");
-			
-			    	    
-			  });
-			  
-			     $('.filebox label[for="ex_file"]').mouseover(function(){
-			    	 $('.filebox label[for="ex_file"]').removeClass('font-color');
-			    	 $('.filebox label[for="ex_file"]').addClass('upload');
-			     });
-			         
-			     $('.filebox label[for="ex_file"]').mouseout(function(){
-			    	 $('.filebox label[for="ex_file"]').addClass('font-color');
-			    	 $('.filebox label[for="ex_file"]').removeClass('upload');
-			     });
-		
+
+		$('#ex_file').change(function() {
+			var list = showname();
+			$('#fileList').html("<span>" + list[0] + "</span><br/>");
+
+		});
+
+		$('.filebox label[for="ex_file"]').mouseover(function() {
+			$('.filebox label[for="ex_file"]').removeClass('font-color');
+			$('.filebox label[for="ex_file"]').addClass('upload');
+		});
+
+		$('.filebox label[for="ex_file"]').mouseout(function() {
+			$('.filebox label[for="ex_file"]').addClass('font-color');
+			$('.filebox label[for="ex_file"]').removeClass('upload');
+		});
+
 		var check_id = false; //id 중복확인
 		var check_pw = false; //비밀번호 일치여부 확인
 
@@ -129,125 +127,142 @@ function showname () {
 		$('#introduction').keyup(function(e) {
 			$('.introduction').html('');
 		});
-		
-		
-		$('#introduction').keyup(function(e) {
-			var length = $('#introduction').val().length;
-			if(length>70){
-			   $('#check-introduction-length').addClass('error').html('maximum is 70 characters');
-			}else{
-				$('#check-introduction-length').removeClass('error').html('');
-			}
-		});
+
+		$('#introduction').keyup(
+				function(e) {
+					var length = $('#introduction').val().length;
+					if (length > 70) {
+						$('#check-introduction-length').addClass('error').html(
+								'maximum is 70 characters');
+					} else {
+						$('#check-introduction-length').removeClass('error')
+								.html('');
+					}
+				});
 
 	});
 </script>
 
 <div class="py-5">
-<form:form commandName="student" id="join-form"
-		enctype="multipart/form-data" class="text-center border border-light p-5 mx-auto col-lg-5 col-md-8 col-sm-9 rounded " 
+	<form:form commandName="student" id="join-form"
+		enctype="multipart/form-data"
+		class="text-center border border-light p-5 mx-auto col-lg-5 col-md-8 col-sm-9 rounded "
 		style="  box-shadow: 1px 1px 5px -1px #777;">
 
-    <p class="h4 mb-4">Sign up</p>
+		<p class="h4 mb-4">Sign up</p>
 
-	<c:if test="${not empty error}">
-	<div class="alert alert-light error" role="alert">${error}</div>
-	</c:if>
-
-
-    <div class="form-row mb-4">
-        <div class="col-sm-6">
-            <form:input path="studentNumber" class="form-control" placeholder="Student Number"/>
-            <form:errors path="studentNumber" element="div" cssClass="error studentNumber" />
-            <span id="check-id-message"></span>
-        </div>
-        <div class="col-sm-6">
-	        <form:input path="studentName" class="form-control" placeholder="Name"/>
-			<form:errors path="studentName" element="div"
-				cssClass="error studentName" />            
-        </div>
-    </div>
+		<c:if test="${not empty error}">
+			<div class="alert alert-light error" role="alert">${error}</div>
+		</c:if>
 
 
-
-    <!-- Password -->
-    <div class="mb-4">
-    <form:password path="password"  class="form-control" placeholder="Password" />
-	<form:errors path="password" element="div" cssClass="error" />
-	</div>
-	
-	<div class="mb-4">
-	<input type="password" name="password2" id="password2" required  class="form-control" placeholder="Password" /> 
-	<span id="check-pw-message"></span>	
-    </div>
-
-    <!-- Email -->
-    <div class="mb-4">
-    <form:input path="email"  class="form-control" placeholder="Email"/>
-	<form:errors path="email" element="div" cssClass="error email" />
-    </div>
-
-    <!-- Phone Number -->
-    <div class="mb-4">
-    <form:input path="cellPhone" class="form-control" placeholder="Phone number" />
-	<form:errors path="cellPhone" element="div" cssClass="error cellPhone" />
-	</div>
-
-
-    <!-- Address -->
-    <div class="mb-4">
-    <form:input path="address" class="form-control" placeholder="Address"/>
-	<form:errors path="address" element="div" cssClass="error address" />
-	</div>
-
-    <!-- Major -->
-    <div class="mb-4">
-    <form:input path="major" class="form-control" placeholder="Major"/>
-	<form:errors path="major" element="div" cssClass="error major" />
-	</div>
-
-
-   <!-- YEAR -->
-   <div class="form-row mb-4">
-        <div class="col-sm-6">
-            <!-- admission -->  
-            <form:input type="date" path="admissionYear" required="true"  class="form-control" placeholder="Admission Year"/>
-			<form:errors path="admissionYear" element="div" cssClass="error" />          
-        </div>
-        <div class="col-sm-6">
-            <!-- graduation -->
-            <form:input type="date" path="graduationYear" required="true" class="form-control" placeholder="Graduation Year"/>
-			<form:errors path="graduationYear" element="div" cssClass="error" />
-        </div>
-    </div>
-
-    <!-- Introduction -->
-    <div class="mb-4">
-	<form:input path="introduction" class="form-control" placeholder="Introduction"/>
-	<form:errors path="introduction" element="div" cssClass="error introduction" />
-	<span id="check-introduction-length"></span>
-	</div>
+		<div class="form-row mb-4">
+			<div class="col-sm-6">
+				<form:input path="studentNumber" class="form-control"
+					placeholder="Student Number" />
+				<form:errors path="studentNumber" element="div"
+					cssClass="error studentNumber" />
+				<span id="check-id-message"></span>
+			</div>
+			<div class="col-sm-6">
+				<form:input path="studentName" class="form-control"
+					placeholder="Name" />
+				<form:errors path="studentName" element="div"
+					cssClass="error studentName" />
+			</div>
+		</div>
 
 
 
+		<!-- Password -->
+		<div class="mb-4">
+			<form:password path="password" class="form-control"
+				placeholder="Password" />
+			<form:errors path="password" element="div" cssClass="error" />
+		</div>
 
-     <div class="filebox text-left">	
-		<label for="ex_file" class="font-color">IMAGE UPLOAD</label> 
-        <input type="file" id="ex_file" name="avatar" accept="image/*" id="defaultRegisterPhonePassword" class="form-control mb-4" placeholder="Profile Image" aria-describedby="defaultRegisterFormPhoneHelpBlock"/>
-	    <span id="fileList" style="padding-left:10px"></span>
-	</div> 
+		<div class="mb-4">
+			<input type="password" name="password2" id="password2" required
+				class="form-control" placeholder="Password" /> <span
+				id="check-pw-message"></span>
+		</div>
+
+		<!-- Email -->
+		<div class="mb-4">
+			<form:input path="email" class="form-control" placeholder="Email" />
+			<form:errors path="email" element="div" cssClass="error email" />
+		</div>
+
+		<!-- Phone Number -->
+		<div class="mb-4">
+			<form:input path="cellPhone" class="form-control"
+				placeholder="Phone number" />
+			<form:errors path="cellPhone" element="div"
+				cssClass="error cellPhone" />
+		</div>
 
 
-    <!-- Sign up button -->
-    <button class="btn my-4 btn-block" type="submit" style="background-color: #ee3733;">Sign in</button>
+		<!-- Address -->
+		<div class="mb-4">
+			<form:input path="address" class="form-control" placeholder="Address" />
+			<form:errors path="address" element="div" cssClass="error address" />
+		</div>
+
+		<!-- Major -->
+		<div class="mb-4">
+			<form:input path="major" class="form-control" placeholder="Major" />
+			<form:errors path="major" element="div" cssClass="error major" />
+		</div>
+
+
+		<!-- YEAR -->
+		<div class="form-row mb-4">
+			<div class="col-sm-6">
+				<!-- admission -->
+				<form:input type="date" path="admissionYear" required="true"
+					class="form-control" placeholder="Admission Year" />
+				<form:errors path="admissionYear" element="div" cssClass="error" />
+			</div>
+			<div class="col-sm-6">
+				<!-- graduation -->
+				<form:input type="date" path="graduationYear" required="true"
+					class="form-control" placeholder="Graduation Year" />
+				<form:errors path="graduationYear" element="div" cssClass="error" />
+			</div>
+		</div>
+
+		<!-- Introduction -->
+		<div class="mb-4">
+			<form:input path="introduction" class="form-control"
+				placeholder="Introduction" />
+			<form:errors path="introduction" element="div"
+				cssClass="error introduction" />
+			<span id="check-introduction-length"></span>
+		</div>
 
 
 
-   
-</form:form>
+
+		<div class="filebox text-left">
+			<label for="ex_file" class="font-color">IMAGE UPLOAD</label> <input
+				type="file" id="ex_file" name="avatar" accept="image/*"
+				id="defaultRegisterPhonePassword" class="form-control mb-4"
+				placeholder="Profile Image"
+				aria-describedby="defaultRegisterFormPhoneHelpBlock" /> <span
+				id="fileList" style="padding-left: 10px"></span>
+		</div>
+
+
+		<!-- Sign up button -->
+		<button class="btn my-4 btn-block" type="submit"
+			style="background-color: #ee3733;">Sign in</button>
+
+
+
+
+	</form:form>
 </div>
 
 <!-- Default form register -->
-	
 
 

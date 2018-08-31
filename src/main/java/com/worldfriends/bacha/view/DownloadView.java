@@ -15,26 +15,24 @@ import com.worldfriends.bacha.util.FileUtil;
 @Component("download")
 public class DownloadView extends AbstractView {
 
-   @Override
-   protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response)
-         throws Exception {
-      String path = (String)model.get("path");
-      String type = (String)model.get("type");
-      String fileName = (String)model.get("fileName");
-      fileName = URLEncoder.encode(fileName, "utf-8"); //한글을 위한 url 인코딩
-      
-      File file = new File(path);
-      
-      //응답 헤더 설정
-      response.setContentType(type);
-      response.setContentLength((int)file.length());
-      response.setHeader("Content-Disposition", 
-            "attachment; filename=\""+fileName+"\";");
-      response.setHeader("Content-Transfer-Encoding", "binary");
-      
-      FileUtil.copy(path, response);
-   }
-   
-   
+	@Override
+	protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		String path = (String)model.get("path");
+		String type = (String)model.get("type");
+		String fileName = (String)model.get("fileName");
+		fileName = URLEncoder.encode(fileName, "utf-8"); //한글을 위한 url 인코딩
+		
+		File file = new File(path);
+		
+		//응답 헤더 설정
+		response.setContentType(type);
+		response.setContentLength((int)file.length());
+		response.setHeader("Content-Disposition", 
+				"attachment; filename=\""+fileName+"\";");
+		response.setHeader("Content-Transfer-Encoding", "binary");
+		
+		FileUtil.copy(path, response);
+	}
 
 }

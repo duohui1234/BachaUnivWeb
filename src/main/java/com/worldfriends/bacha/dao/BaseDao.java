@@ -1,10 +1,7 @@
 package com.worldfriends.bacha.dao;
 
 import java.util.List;
-import java.util.Map;
-
 import com.worldfriends.bacha.model.Pagination;
-import com.worldfriends.bacha.model.SortOption;
 
 public interface BaseDao<M, K> {
 	int getCount() throws Exception;

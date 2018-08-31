@@ -63,7 +63,7 @@ public class HomeController {
       SortOption alSortOption = new SortOption(alPagination,"graduation_year", "student_name", "");
       List<Student> alumniList = studentService.getListByNumSort(alSortOption);
 
-    		  
+            
 
       // view에 넘길 정보 구성
       model.addAttribute("alumniList", alumniList);

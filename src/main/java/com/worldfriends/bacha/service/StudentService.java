@@ -10,35 +10,35 @@ import com.worldfriends.bacha.model.Password;
 import com.worldfriends.bacha.model.SortOption;
 
 public interface StudentService {
-   Student checkLogin(Login login) throws Exception;
+	Student checkLogin(Login login) throws Exception;
 
-   boolean create(Student student) throws Exception;
+	boolean create(Student student) throws Exception;
 
-   boolean checkId(String studentNumber) throws Exception;
+	boolean checkId(String studentNumber) throws Exception;
 
-   boolean update(Student student) throws Exception;
+	boolean update(Student student) throws Exception;
 
-   Student getStudent(String studentNumber) throws Exception;
+	Student getStudent(String studentNumber) throws Exception;
 
-   Pagination getPagination(int page) throws Exception;
-   
-   Pagination getPagination(int page, int totalSize) throws Exception;
-   
-   Pagination getPaginationHome(int page, int totalSize) throws Exception;
+	Pagination getPagination(int page) throws Exception;
 
-   List<Student> getListByNumSort(SortOption sortOption) throws Exception;
+	Pagination getPagination(int page, int totalSize) throws Exception;
 
-   List<Student> getListByAlphabetSort(SortOption sortOption) throws Exception;
+	Pagination getPaginationHome(int page, int totalSize) throws Exception;
 
-   // 아바타 처리
-   byte[] getAvatar(String studentNumber) throws Exception;
+	List<Student> getListByNumSort(SortOption sortOption) throws Exception;
 
-   boolean insertAvatar(Avatar avatar) throws Exception;
+	List<Student> getListByAlphabetSort(SortOption sortOption) throws Exception;
 
-   boolean updateAvatar(Avatar avatar) throws Exception;
+	// 아바타 처리
+	byte[] getAvatar(String studentNumber) throws Exception;
 
-   boolean deleteAvatar(String studentNumber) throws Exception;
+	boolean insertAvatar(Avatar avatar) throws Exception;
 
-   boolean changepassword(Password password) throws Exception;
+	boolean updateAvatar(Avatar avatar) throws Exception;
+
+	boolean deleteAvatar(String studentNumber) throws Exception;
+
+	boolean changepassword(Password password) throws Exception;
 
 }

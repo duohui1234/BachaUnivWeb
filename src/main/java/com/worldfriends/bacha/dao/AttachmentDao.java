@@ -5,7 +5,7 @@ import java.util.List;
 import com.worldfriends.bacha.model.Attachment;
 
 public interface AttachmentDao {
-   int getCount(int boardId) throws Exception;
+	int getCount(int boardId) throws Exception;
 
     Attachment selectOne(int attachmentId) throws Exception;
 

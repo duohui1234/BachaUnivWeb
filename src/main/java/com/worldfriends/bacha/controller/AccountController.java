@@ -23,7 +23,6 @@ import com.worldfriends.bacha.model.Avatar;
 import com.worldfriends.bacha.model.Login;
 import com.worldfriends.bacha.model.Student;
 import com.worldfriends.bacha.service.StudentService;
-
 import com.worldfriends.bacha.exception.LoginFailException;
 
 import com.worldfriends.bacha.controller.AccountController;
@@ -49,12 +48,15 @@ public class AccountController {
 
 		Student student = service.checkLogin(login); //예외 발생시 
 
+		// System.out.println(member);
 		session.setAttribute("USER", student); //여기서 예외 발생(로그인 실패)하면 handleLoginError()호출됨
 		
 		String url = login.getUrl();
-		if(url != null && !url.isEmpty()) return "redirect:/" + url;
+		if(url!=null && !url.isEmpty()) return "redirect:/"+url;
 		return "redirect:/";
 	}
+	
+
 
 	@RequestMapping(value = "/join", method = RequestMethod.GET)
 	public String joinForm(Student student) {
@@ -66,7 +68,6 @@ public class AccountController {
 							 BindingResult result,
 							 @RequestParam("avatar") MultipartFile mFile,
 							 RedirectAttributes ra) throws Exception {
-		System.out.println(student);
 		// 유효성 검사 결과 실패
 		if (result.hasErrors()) {
 			return "account/join";
@@ -115,11 +116,12 @@ public class AccountController {
 		request.setAttribute("error", e.getMessage());
 		return "account/login";
 	}
-
+	
 	//데이터베이스 예외 발생시 호출됨
 	@ExceptionHandler({SQLException.class, DataAccessException.class})
 	public String handleError() {
 		return "error/database_error"; //에러 화면 호출
 	}
+	
 	
 }

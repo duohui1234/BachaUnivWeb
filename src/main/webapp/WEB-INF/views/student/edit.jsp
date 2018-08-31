@@ -2,37 +2,41 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <script>
-	function showname() {
-		var name = document.getElementById('ex_file');
-		var list = [ name.files.item(0).name ];
-		return list;
-	};
-
-	$(document).ready(function() {
-
-		$('#ex_file').change(function() {
-			var list = showname();
-			$('#fileList').html("<span>FileName: " + list[0] + "</span><br/>");
-
-		});
-
-		$('.filebox label[for="ex_file"]').mouseover(function() {
-			$('.filebox label[for="ex_file"]').removeClass('font-color');
-			$('.filebox label[for="ex_file"]').addClass('upload');
-		});
-
-		$('.filebox label[for="ex_file"]').mouseout(function() {
-			$('.filebox label[for="ex_file"]').addClass('font-color');
-			$('.filebox label[for="ex_file"]').removeClass('upload');
-		});
-
-	});
+    
+    function showname () {
+	    var name = document.getElementById('ex_file');
+	    var list = [name.files.item(0).name];
+	    return list;
+	  };
+	  
+	$(document).ready(function(){
+		
+		  $('#ex_file').change(function () {
+		    var list = showname();
+		   $('#fileList').html("<span>FileName: "+list[0]+"</span><br/>");
+		
+		    	    
+		  });
+		  
+		     $('.filebox label[for="ex_file"]').mouseover(function(){
+		    	 $('.filebox label[for="ex_file"]').removeClass('font-color');
+		    	 $('.filebox label[for="ex_file"]').addClass('upload');
+		     });
+		         
+		     $('.filebox label[for="ex_file"]').mouseout(function(){
+		    	 $('.filebox label[for="ex_file"]').addClass('font-color');
+		    	 $('.filebox label[for="ex_file"]').removeClass('upload');
+		     });
+		  
+		});	
+ 
 </script>
 
 
-<div id="edit-form" class="edit-form col-8 mx-auto"
+<div id="edit-form"
+	class="edit-form col-8 mx-auto"
 	style="padding: 40px !important;">
 	<h4
 		style="margin-bottom: 50px !important; padding-bottom: 20px !important; border-bottom: 1px dotted #8c8b8b;">Edit
@@ -42,15 +46,14 @@
 		<div class="row">
 
 			<div class="col-lg-3 col-md-4 col-sm-12">
-
-				<img src="avatar?studentNumber=${student.studentNumber}"
-					class="mb-10">
-				<div class="filebox text-center" style="width: 150px">
-					<label for="ex_file" class="font-color">IMAGE UPLOAD</label> <input
-						type="file" id="ex_file" name="avatar">
-					<p id="fileList"></p>
-				</div>
-
+			
+			  <img src="avatar?studentNumber=${student.studentNumber}" class="mb-10">
+			  <div class="filebox text-center" style="width:150px">	
+				<label for="ex_file" class="font-color">IMAGE UPLOAD</label> 
+				<input type="file" id="ex_file" name="avatar">
+				<p id="fileList"></p>
+			 </div> 
+			 
 			</div>
 
 
@@ -59,36 +62,34 @@
 			<div class="col-lg-9 col-md-8 col-sm-12" id="info">
 
 				<div class="mb-2">
-					<label for="studentName"><span class="label">NAME :</span>
-						${student.studentName }</label>
+					<label for="studentName"><span class="label">NAME :</span> ${student.studentName }</label>
 					<form:hidden path="studentName" class="form-control" />
 				</div>
 
 				<div class="mb-2">
-					<label for="studentNumber"><span class="label">STUDENT
-							NUMBER :</span> ${student.studentNumber}</label>
+					<label for="studentNumber"><span class="label">STUDENT NUMBER :</span>
+						${student.studentNumber}</label>
 					<form:hidden path="studentNumber" />
 				</div>
 
 
 				<div class="mb-2">
-					<label for="major"><span class="label">MAJOR :</span>
-						${student.major}</label>
+					<label for="major"><span class="label">MAJOR :</span> ${student.major}</label>
 					<form:hidden path="major" class="form-control" />
 				</div>
 
 				<div class="mb-2">
-
-					<label for="admissionYear"><span class="label">ADMISSION
-							YEAR : </span> <c:out
-							value="${fn:substring(student.admissionYear,0,10)}" /> </label>
+				
+					<label for="admissionYear"><span class="label">ADMISSION YEAR : </span>
+					 <c:out value="${fn:substring(student.admissionYear,0,10)}"/>
+					</label>
 					<form:hidden path="admissionYear" class="form-control" />
 				</div>
 
 				<div>
-					<label for=graduationYear><span class="label">GRADUATION
-							YEAR :</span> <c:out
-							value="${fn:substring(student.graduationYear,0,10)}" /> </label>
+					<label for=graduationYear><span class="label">GRADUATION YEAR :</span>
+					<c:out value="${fn:substring(student.graduationYear,0,10)}"/>
+					</label>
 					<form:hidden path="graduationYear" class="form-control" />
 				</div>
 
@@ -129,11 +130,10 @@
 
 		<div class="md-form text-center">
 			<button type="submit" class="btn" style="background-color: #ee3733;">
-				<i class="fa fa-check"></i> submit
+				<i class="fa fa-check"></i>&nbsp;submit
 			</button>
-			<a href="../student/profile" class="btn red-button"> <i
-				class="fa fa-undo"></i> CANCEL
-			</a>
+		   <a href="../student/profile" class="btn red-button">
+		  <i class="fa fa-undo"></i>&nbsp;CANCEL </a>
 		</div>
 	</form:form>
 </div>

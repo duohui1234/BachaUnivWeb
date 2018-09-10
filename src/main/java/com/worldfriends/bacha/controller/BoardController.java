@@ -1,5 +1,6 @@
 package com.worldfriends.bacha.controller;
 
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import com.worldfriends.bacha.model.Pagination;
 import com.worldfriends.bacha.model.SortOption;
 import com.worldfriends.bacha.model.Student;
 import com.worldfriends.bacha.service.BoardService;
+import com.worldfriends.bacha.util.S3Util;
 
 @Controller
 @RequestMapping("/board")
@@ -36,7 +38,11 @@ public class BoardController {
    BoardService service;
    @Autowired
    BoardDao dao;
+	
+   S3Util s3 = new S3Util();
+   String bucketName = "upload-attachment";
 
+   
    @RequestMapping(value = "/list", method = RequestMethod.GET)
    public void list(@RequestParam(value = "page", defaultValue = "1") int page, 
                 @RequestParam(value = "option", defaultValue = "reg_date") String option, 
@@ -68,6 +74,13 @@ public class BoardController {
 
    }
 
+   
+   
+   
+   
+   
+   
+   
    @RequestMapping(value = "/create", method = RequestMethod.POST)
    public String createSubmit(@Valid Board board,
                         BindingResult result,
@@ -77,10 +90,18 @@ public class BoardController {
          return "board/create";
       
       List<MultipartFile> attachments = request.getFiles("files");
+
       
       if(!service.create(board, attachments)) return "board/create";
       return "redirect:list";
    }
+   
+   
+   
+   
+   
+   
+   
    
    @RequestMapping(value = "/view/{boardId}", method = RequestMethod.GET)
    public String view(@PathVariable int boardId, Model model) throws Exception {
@@ -94,7 +115,9 @@ public class BoardController {
    public String download(@PathVariable int attachmentId, Model model) throws Exception{
       Attachment file = service.getAttachment(attachmentId);
       
-      String path = "c:/temp/upload"+"/"+file.getLocation();
+	  //URL url = new URL(s3.getFileURL(bucketName, "upload"+file.getLocation()));
+      String path = "upload"+file.getLocation();
+      System.out.println("here  "+path);
       model.addAttribute("type", "application/octet-stream");
       model.addAttribute("path", path);
       model.addAttribute("fileName", file.getFileName());

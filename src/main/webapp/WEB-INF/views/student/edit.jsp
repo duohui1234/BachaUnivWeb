@@ -15,7 +15,7 @@
 		
 		  $('#ex_file').change(function () {
 		    var list = showname();
-		   $('#fileList').html("<span>FileName: "+list[0]+"</span><br/>");
+		   $('#fileList').html(list[0]+"<br/>");
 		
 		    	    
 		  });
@@ -51,7 +51,8 @@
 			  <div class="filebox text-center" style="width:150px">	
 				<label for="ex_file" class="font-color">IMAGE UPLOAD</label> 
 				<input type="file" id="ex_file" name="avatar">
-				<p id="fileList"></p>
+				<p id="fileList" style="text-overflow: ellipsis;   overflow: hidden; 
+				"></p>
 			 </div> 
 			 
 			</div>

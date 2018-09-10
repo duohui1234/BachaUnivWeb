@@ -16,6 +16,8 @@ import com.worldfriends.bacha.model.Attachment;
 import com.worldfriends.bacha.model.Board;
 import com.worldfriends.bacha.model.Pagination;
 import com.worldfriends.bacha.model.SortOption;
+import com.worldfriends.bacha.util.S3Util;
+import com.worldfriends.bacha.util.UploadFileUtils;
 
 @Service
 public class BoardServiceImpl implements BoardService {
@@ -30,7 +32,13 @@ public class BoardServiceImpl implements BoardService {
    
    @Autowired
    StudentDao studentDao;
+   
+   S3Util s3 = new S3Util();
+   String bucketName = "upload-attachment";
 
+   
+   
+   
    @Transactional
    @Override
    public boolean create(Board board, List<MultipartFile> fileList) throws Exception {
@@ -38,6 +46,7 @@ public class BoardServiceImpl implements BoardService {
       upload(board.getBoardId(), fileList);
       return result == 1;
    }
+   
 
    public boolean upload(int boardId, List<MultipartFile> fileList) throws Exception{
       for(MultipartFile file:fileList) {
@@ -49,15 +58,27 @@ public class BoardServiceImpl implements BoardService {
       return true;
    }
    
+
+   
    public Attachment save(int boardId, MultipartFile file) throws Exception{
-      long fileNo = System.currentTimeMillis();
-      String fname = file.getOriginalFilename(); //원본 파일명
-      String newName = fileNo+"_"+fname;   //unique한 파일명을 만듦
-      String path = "c:/temp/upload/" + newName; 
-      file.transferTo(new File(path)); //실제 경로에 파일 저장
+	 
+	   
+	  String fname = file.getOriginalFilename(); //원본 파일명
+	  String uploadpath = "upload";
+	  String newName = UploadFileUtils.uploadFile(uploadpath, file.getOriginalFilename(), file.getBytes());
+
+	  
+//      long fileNo = System.currentTimeMillis();
+//      String newName = fileNo+"_"+fname;   //unique한 파일명을 만듦
+//      String path = "c:/temp/upload/" + newName; 
+//      file.transferTo(new File(path)); //실제 경로에 파일 저장
+	  
       return new Attachment(boardId, fname, newName); 
    }
 
+   
+ 
+   
    @Transactional
    @Override
    public boolean update(Board board, List<MultipartFile> fileList) throws Exception {

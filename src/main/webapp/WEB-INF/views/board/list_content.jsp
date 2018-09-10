@@ -20,7 +20,7 @@
       <c:forEach var="board" items="${listNotice}">
          <tr class="table-notice">
             <td class="text-center"><span class="badge badge-info">Notice</span></td>
-            <td><a href="view/${board.boardId}" class="text-dark">${board.title}
+            <td><a href="board/view/${board.boardId}" class="text-dark">${board.title}
                   <span style="color: rgb(238, 55, 51);" class="font-weight-bold">
                      (${board.replyNum})</span>
             </a></td>
@@ -43,7 +43,7 @@
       <c:forEach var="board" items="${list}" varStatus="status">
          <tr>
             <td class="text-center">${board.seq}</td>
-            <td><a href="view/${board.boardId}" class="text-dark">${board.title}
+            <td><a href="board/view/${board.boardId}" class="text-dark">${board.title}
                   <span style="color: rgb(238, 55, 51);" class="font-weight-bold">
                      (${board.replyNum})</span>
             </a></td>

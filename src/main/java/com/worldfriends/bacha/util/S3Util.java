@@ -21,8 +21,8 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 public class S3Util {
 
 	
-	private String accessKey = "AKIAIM4SLNIXNRMHVFZQ"; // 엑세스 키
-	private String secretKey = "+Q914JcXdngF/P3Z4vp5C7MheLTWu27XT/lXzjSr"; // 보안 엑세스 키
+	private String accessKey = "AKIAJAKGZCTN54DBGMXA"; // 엑세스 키
+	private String secretKey = "G5QXBrpngEQjLkgCYFxBC2sGELH2apEftdphzeus"; // 보안 엑세스 키
 
 	private AmazonS3 conn;
 	public AWSCredentials credentials;

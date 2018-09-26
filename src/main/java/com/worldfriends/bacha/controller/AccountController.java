@@ -117,11 +117,11 @@ public class AccountController {
 		return "account/login";
 	}
 	
-	//데이터베이스 예외 발생시 호출됨
-	@ExceptionHandler({SQLException.class, DataAccessException.class})
-	public String handleError() {
-		return "error/database_error"; //에러 화면 호출
-	}
+//	//데이터베이스 예외 발생시 호출됨
+//	@ExceptionHandler({SQLException.class, DataAccessException.class})
+//	public String handleError() {
+//		return "error/database_error"; //에러 화면 호출
+//	}
 	
 	
 }

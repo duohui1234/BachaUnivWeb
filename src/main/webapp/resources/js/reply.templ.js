@@ -20,7 +20,7 @@ var replyTempl = {
             data-reply-level="${reply.replyLevel}">
             
             <img class="d-flex mb-3 mx-auto avatar rounded-circle" 
-               width="80" src="/Bacha/student/avatar?studentNumber=${reply.writer}">
+               width="80" src="/bacha/student/avatar?studentNumber=${reply.writer}">
             <div class="media-body text-center text-md-left ml-md-3 ml-0">
                <div style="overflow:hidden">
                   <p class="mt-0 mb-2 font-weight-bold float-left">

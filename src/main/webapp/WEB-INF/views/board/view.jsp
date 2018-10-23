@@ -45,7 +45,7 @@
            var media = $('.media[data-reply-id='+id+']');
            opt.api.remove(id, function(result){ //replyId 추출
             if(result){
-               media.find('.reply-content').eq(0).text('This comment has been deleted');
+               media.find('.reply-content').eq(0).text('삭제된 글입니다.');
                media.find('.reply-edit-show').remove(); 
                media.find('.reply-delete').remove(); 
             }else{
